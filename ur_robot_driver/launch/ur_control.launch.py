@@ -36,7 +36,17 @@ from launch_ros.substitutions import FindPackageShare
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.conditions import IfCondition, UnlessCondition
+<<<<<<< HEAD
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+=======
+from launch.substitutions import (
+    AndSubstitution,
+    LaunchConfiguration,
+    NotSubstitution,
+    PathJoinSubstitution,
+)
+from launch.launch_description_sources import AnyLaunchDescriptionSource
+>>>>>>> ca19535 (Fix passing launch_dashobard_client launch argument (#1057))
 
 
 def launch_setup(context, *args, **kwargs):
@@ -238,7 +248,13 @@ def launch_setup(context, *args, **kwargs):
 
     dashboard_client_node = Node(
         package="ur_robot_driver",
+<<<<<<< HEAD
         condition=IfCondition(launch_dashboard_client) and UnlessCondition(use_fake_hardware),
+=======
+        condition=IfCondition(
+            AndSubstitution(launch_dashboard_client, NotSubstitution(use_mock_hardware))
+        ),
+>>>>>>> ca19535 (Fix passing launch_dashobard_client launch argument (#1057))
         executable="dashboard_client",
         name="dashboard_client",
         output="screen",
