@@ -305,6 +305,18 @@ def launch_setup(context, *args, **kwargs):
         arguments=["-d", rviz_config_file],
     )
 
+    #robotiq_gripper_controller_spawner = Node(
+    #    package="controller_manager",
+    #    executable="spawner",
+    #    arguments=["robotiq_gripper_controller", "-c", "/controller_manager"],
+    #)
+
+    #robotiq_activation_controller_spawner = Node(
+    #    package="controller_manager",
+    #    executable="spawner",
+    #    arguments=["robotiq_activation_controller", "-c", "/controller_manager"],
+    #)
+
     # Spawn controllers
     def controller_spawner(controllers, active=True):
         inactive_flags = ["--inactive"] if not active else []
@@ -326,6 +338,9 @@ def launch_setup(context, *args, **kwargs):
         "io_and_status_controller",
         "speed_scaling_state_broadcaster",
         "force_torque_sensor_broadcaster",
+        "scaled_joint_trajectory_controller",
+        "robotiq_gripper_controller",
+        "robotiq_activation_controller"
     ]
     controllers_inactive = ["forward_position_controller"]
 
