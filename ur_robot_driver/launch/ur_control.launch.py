@@ -338,9 +338,8 @@ def launch_setup(context, *args, **kwargs):
         "io_and_status_controller",
         "speed_scaling_state_broadcaster",
         "force_torque_sensor_broadcaster",
-        "scaled_joint_trajectory_controller",
         "robotiq_gripper_controller",
-        "robotiq_activation_controller"
+        "robotiq_activation_controller",
     ]
     controllers_inactive = ["forward_position_controller"]
 
@@ -466,7 +465,7 @@ def generate_launch_description():
                     FindPackageShare(LaunchConfiguration("description_package")),
                     "config",
                     LaunchConfiguration("ur_type"),
-                    "default_kinematics.yaml",
+                    "hrilab_kinematics.yaml",
                 ]
             ),
             description="The calibration configuration of the actual robot used.",
