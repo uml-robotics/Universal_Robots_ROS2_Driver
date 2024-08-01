@@ -63,6 +63,22 @@
       <joint name="${prefix}wrist_2_joint" value="-1.5846" />
       <joint name="${prefix}wrist_3_joint" value="1.5600" />
     </group_state>
+    <group_state name="${prefix}look_left" group="${prefix}${name}_manipulator">
+      <joint name="${prefix}elbow_joint" value="2.5024" />
+      <joint name="${prefix}shoulder_lift_joint" value="-2.5486" />
+      <joint name="${prefix}shoulder_pan_joint" value="3.0716" />
+      <joint name="${prefix}wrist_1_joint" value="-1.700" />
+      <joint name="${prefix}wrist_2_joint" value="-1.0332" />
+      <joint name="${prefix}wrist_3_joint" value="0.6822" />
+    </group_state>
+    <group_state name="${prefix}look_right" group="${prefix}${name}_manipulator">
+      <joint name="${prefix}elbow_joint" value="2.5024" />
+      <joint name="${prefix}shoulder_lift_joint" value="-2.5486" />
+      <joint name="${prefix}shoulder_pan_joint" value="3.0716" />
+      <joint name="${prefix}wrist_1_joint" value="-1.8598" />
+      <joint name="${prefix}wrist_2_joint" value="-2.1564" />
+      <joint name="${prefix}wrist_3_joint" value="3.0712" />
+    </group_state>
     <group_state name="${prefix}open" group="${prefix}robotiq_gripper">
         <joint name="${prefix}robotiq_85_left_knuckle_joint" value="0"/>
     </group_state>
