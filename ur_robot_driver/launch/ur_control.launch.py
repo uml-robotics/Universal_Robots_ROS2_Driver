@@ -36,14 +36,7 @@ from launch_ros.substitutions import FindPackageShare
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.conditions import IfCondition, UnlessCondition
-from launch.substitutions import (
-    AndSubstitution,
-    Command,
-    FindExecutable,
-    LaunchConfiguration,
-    NotSubstitution,
-    PathJoinSubstitution,
-)
+from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 
 
 def launch_setup(context, *args, **kwargs):
@@ -245,9 +238,7 @@ def launch_setup(context, *args, **kwargs):
 
     dashboard_client_node = Node(
         package="ur_robot_driver",
-        condition=IfCondition(
-            AndSubstitution(launch_dashboard_client, NotSubstitution(use_fake_hardware))
-        ),
+        condition=IfCondition(launch_dashboard_client) and UnlessCondition(use_fake_hardware),
         executable="dashboard_client",
         name="dashboard_client",
         output="screen",
