@@ -5,73 +5,21 @@
 # cases. For specific applications, higher values might lead to better execution performance.
 
 joint_limits:
-  elbow_joint:
-    has_velocity_limits: true
-    max_velocity: 3.1415926535897931
-    has_acceleration_limits: false
-    max_acceleration: 5.0
-  robotiq_85_left_finger_tip_joint:
-    has_velocity_limits: false
-    max_velocity: 0
-    has_acceleration_limits: false
-    max_acceleration: 0
-  robotiq_85_left_inner_knuckle_joint:
-    has_velocity_limits: false
-    max_velocity: 0
-    has_acceleration_limits: false
-    max_acceleration: 0
-  robotiq_85_left_knuckle_joint:
-    has_velocity_limits: true
-    max_velocity: 0.5
-    has_acceleration_limits: false
-    max_acceleration: 0
-  robotiq_85_right_finger_tip_joint:
-    has_velocity_limits: false
-    max_velocity: 0
-    has_acceleration_limits: false
-    max_acceleration: 0
-  robotiq_85_right_inner_knuckle_joint:
-    has_velocity_limits: false
-    max_velocity: 0
-    has_acceleration_limits: false
-    max_acceleration: 0
-  robotiq_85_right_knuckle_joint:
-    has_velocity_limits: true
-    max_velocity: 0.5
-    has_acceleration_limits: false
-    max_acceleration: 0
-  shoulder_lift_joint:
-    has_velocity_limits: true
-    max_velocity: 3.1415926535897931
-    has_acceleration_limits: false
-    max_acceleration: 5.0
-    max_position: -1.0335224310504358
-    min_position: -2.7769482771502894
   shoulder_pan_joint:
-    has_velocity_limits: true
-    max_velocity: 3.1415926535897931
-    has_acceleration_limits: false
-    max_acceleration: 5.0    
-    max_position: 4.71238899
-    min_position: 1.57079633
+    has_acceleration_limits: true
+    max_acceleration: 5.0
+  shoulder_lift_joint:
+    has_acceleration_limits: true
+    max_acceleration: 5.0
+  elbow_joint:
+    has_acceleration_limits: true
+    max_acceleration: 5.0
   wrist_1_joint:
-    has_velocity_limits: true
-    max_velocity: 3.1415926535897931
-    has_acceleration_limits: false
+    has_acceleration_limits: true
     max_acceleration: 5.0
-    min_position: -3.1415926535897931
-    max_position: -1.2
   wrist_2_joint:
-    has_velocity_limits: true
-    max_velocity: 3.1415926535897931
-    has_acceleration_limits: false
+    has_acceleration_limits: true
     max_acceleration: 5.0
-    max_position: 0.0
-    min_position: -3.1415926535897931
   wrist_3_joint:
-    has_velocity_limits: true
-    max_velocity: 10.0
-    has_acceleration_limits: false
+    has_acceleration_limits: true
     max_acceleration: 5.0
-    max_position: 3.66519143
-    min_position: -0.52359877559
