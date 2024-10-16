@@ -24,6 +24,9 @@ controller_manager:
     forward_position_controller:
       type: position_controllers/JointGroupPositionController
 
+    ur_configuration_controller:
+      type: ur_controllers/URConfigurationController
+      
     robotiq_gripper_controller:
       type: position_controllers/GripperActionController
     robotiq_activation_controller:
@@ -35,6 +38,10 @@ speed_scaling_state_broadcaster:
     tf_prefix: "$(var tf_prefix)"
 
 io_and_status_controller:
+  ros__parameters:
+    tf_prefix: "$(var tf_prefix)"
+
+ur_configuration_controller:
   ros__parameters:
     tf_prefix: "$(var tf_prefix)"
 
