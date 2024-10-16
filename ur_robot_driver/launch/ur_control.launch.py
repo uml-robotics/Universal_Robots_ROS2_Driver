@@ -36,14 +36,7 @@ from launch_ros.substitutions import FindPackageShare
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.conditions import IfCondition, UnlessCondition
-from launch.substitutions import (
-    AndSubstitution,
-    Command,
-    FindExecutable,
-    LaunchConfiguration,
-    NotSubstitution,
-    PathJoinSubstitution,
-)
+from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 
 
 def launch_setup(context, *args, **kwargs):
@@ -247,9 +240,7 @@ def launch_setup(context, *args, **kwargs):
 
     dashboard_client_node = Node(
         package="ur_robot_driver",
-        condition=IfCondition(
-            AndSubstitution(launch_dashboard_client, NotSubstitution(use_fake_hardware))
-        ),
+        condition=IfCondition(launch_dashboard_client) and UnlessCondition(use_fake_hardware),
         executable="dashboard_client",
         name="dashboard_client",
         output="screen",
@@ -317,6 +308,18 @@ def launch_setup(context, *args, **kwargs):
         arguments=["-d", rviz_config_file],
     )
 
+    #robotiq_gripper_controller_spawner = Node(
+    #    package="controller_manager",
+    #    executable="spawner",
+    #    arguments=["robotiq_gripper_controller", "-c", "/controller_manager"],
+    #)
+
+    #robotiq_activation_controller_spawner = Node(
+    #    package="controller_manager",
+    #    executable="spawner",
+    #    arguments=["robotiq_activation_controller", "-c", "/controller_manager"],
+    #)
+
     # Spawn controllers
     def controller_spawner(controllers, active=True):
         inactive_flags = ["--inactive"] if not active else []
@@ -339,6 +342,9 @@ def launch_setup(context, *args, **kwargs):
         "speed_scaling_state_broadcaster",
         "force_torque_sensor_broadcaster",
         "ur_configuration_controller",
+
+        "robotiq_gripper_controller",
+        "robotiq_activation_controller",
     ]
     controllers_inactive = ["forward_position_controller"]
 
@@ -452,7 +458,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_file",
-            default_value="ur.urdf.xacro",
+            default_value="ur5_robotiq85_gripper.urdf.xacro",
             description="URDF/XACRO description file with the robot.",
         )
     )
@@ -464,7 +470,7 @@ def generate_launch_description():
                     FindPackageShare(LaunchConfiguration("description_package")),
                     "config",
                     LaunchConfiguration("ur_type"),
-                    "default_kinematics.yaml",
+                    "hrilab_kinematics.yaml",
                 ]
             ),
             description="The calibration configuration of the actual robot used.",
