@@ -345,6 +345,17 @@ def launch_setup(context, *args, **kwargs):
             },
         ],
     )
+    #robotiq_gripper_controller_spawner = Node(
+    #    package="controller_manager",
+    #    executable="spawner",
+    #    arguments=["robotiq_gripper_controller", "-c", "/controller_manager"],
+    #)
+
+    #robotiq_activation_controller_spawner = Node(
+    #    package="controller_manager",
+    #    executable="spawner",
+    #    arguments=["robotiq_activation_controller", "-c", "/controller_manager"],
+    #)
 
     # Spawn controllers
     def controller_spawner(controllers, active=True):
@@ -369,6 +380,8 @@ def launch_setup(context, *args, **kwargs):
         "force_torque_sensor_broadcaster",
         "tcp_pose_broadcaster",
         "ur_configuration_controller",
+        "robotiq_gripper_controller",
+        "robotiq_activation_controller",
     ]
     controllers_inactive = [
         "scaled_joint_trajectory_controller",
@@ -487,7 +500,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_file",
-            default_value="ur.urdf.xacro",
+            default_value="ur5_robotiq85_gripper.urdf.xacro",
             description="URDF/XACRO description file with the robot.",
         )
     )
@@ -499,7 +512,7 @@ def generate_launch_description():
                     FindPackageShare(LaunchConfiguration("description_package")),
                     "config",
                     LaunchConfiguration("ur_type"),
-                    "default_kinematics.yaml",
+                    "hrilab_kinematics.yaml",
                 ]
             ),
             description="The calibration configuration of the actual robot used.",
