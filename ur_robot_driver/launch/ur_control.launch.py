@@ -44,6 +44,7 @@ from launch.substitutions import (
     LaunchConfiguration,
     NotSubstitution,
     PathJoinSubstitution,
+    PythonExpression,
 )
 
 
@@ -62,6 +63,7 @@ def launch_setup(context, *args, **kwargs):
     kinematics_params_file = LaunchConfiguration("kinematics_params_file")
     tf_prefix = LaunchConfiguration("tf_prefix")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
+    sim_isaac = LaunchConfiguration("sim_isaac")
     fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
     controller_spawner_timeout = LaunchConfiguration("controller_spawner_timeout")
     initial_joint_controller = LaunchConfiguration("initial_joint_controller")
@@ -151,6 +153,9 @@ def launch_setup(context, *args, **kwargs):
             "use_fake_hardware:=",
             use_fake_hardware,
             " ",
+            "sim_isaac:=",
+            sim_isaac,
+            " ",
             "fake_sensor_commands:=",
             fake_sensor_commands,
             " ",
@@ -222,6 +227,14 @@ def launch_setup(context, *args, **kwargs):
         ]
     )
 
+    using_simulation_hardware = PythonExpression([
+        "'",
+        use_fake_hardware,
+        "' == 'true' or '",
+        sim_isaac,
+        "' == 'true'",
+    ])
+
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
@@ -231,7 +244,7 @@ def launch_setup(context, *args, **kwargs):
             ParameterFile(initial_joint_controllers, allow_substs=True),
         ],
         output="screen",
-        condition=IfCondition(use_fake_hardware),
+        condition=IfCondition(using_simulation_hardware),
     )
 
     ur_control_node = Node(
@@ -243,12 +256,12 @@ def launch_setup(context, *args, **kwargs):
             ParameterFile(initial_joint_controllers, allow_substs=True),
         ],
         output="screen",
-        condition=UnlessCondition(use_fake_hardware),
+        condition=UnlessCondition(using_simulation_hardware),
     )
 
     dashboard_client_node = IncludeLaunchDescription(
         condition=IfCondition(
-            AndSubstitution(launch_dashboard_client, NotSubstitution(use_fake_hardware))
+            AndSubstitution(launch_dashboard_client, NotSubstitution(using_simulation_hardware))
         ),
         launch_description_source=AnyLaunchDescriptionSource(
             PathJoinSubstitution(
@@ -265,7 +278,7 @@ def launch_setup(context, *args, **kwargs):
         executable="robot_state_helper",
         name="ur_robot_state_helper",
         output="screen",
-        condition=UnlessCondition(use_fake_hardware),
+        condition=UnlessCondition(using_simulation_hardware),
         parameters=[
             {"headless_mode": headless_mode},
             {"robot_ip": robot_ip},
@@ -300,7 +313,7 @@ def launch_setup(context, *args, **kwargs):
         name="controller_stopper",
         output="screen",
         emulate_tty=True,
-        condition=UnlessCondition(use_fake_hardware),
+        condition=UnlessCondition(using_simulation_hardware),
         parameters=[
             {"headless_mode": headless_mode},
             {"joint_controller_active": activate_joint_controller},
@@ -398,7 +411,7 @@ def launch_setup(context, *args, **kwargs):
         controllers_active.append(initial_joint_controller.perform(context))
         controllers_inactive.remove(initial_joint_controller.perform(context))
 
-    if use_fake_hardware.perform(context) == "true":
+    if use_fake_hardware.perform(context) == "true" or sim_isaac.perform(context) == "true":
         controllers_active.remove("tcp_pose_broadcaster")
 
     controller_spawners = [
@@ -536,10 +549,17 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            "sim_isaac",
+            default_value="false",
+            description="Start robot with Isaac Sim simulation.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             "fake_sensor_commands",
             default_value="false",
             description="Enable fake command interfaces for sensors used for simple simulations. "
-            "Used only if 'use_fake_hardware' parameter is true.",
+            "Used only if 'use_fake_hardware' or 'sim_isaac' parameter is true.",
         )
     )
     declared_arguments.append(
