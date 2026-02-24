@@ -413,6 +413,14 @@ def launch_setup(context, *args, **kwargs):
 
     if use_fake_hardware.perform(context) == "true" or sim_isaac.perform(context) == "true":
         controllers_active.remove("tcp_pose_broadcaster")
+        controllers_active.remove("robotiq_activation_controller")
+        
+        # scaled_joint_trajectory_controller requires UR hardware speed scaling
+        if initial_joint_controller.perform(context) == "scaled_joint_trajectory_controller":
+            if "scaled_joint_trajectory_controller" in controllers_active:
+                controllers_active.remove("scaled_joint_trajectory_controller")
+                controllers_active.append("joint_trajectory_controller")
+                controllers_inactive.remove("joint_trajectory_controller")
 
     controller_spawners = [
         controller_spawner(controllers_active),
